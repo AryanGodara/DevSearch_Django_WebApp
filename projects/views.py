@@ -67,9 +67,11 @@ def createProject(request):
     form = ProjectForm()
     
     if request.method == 'POST':
-        
         #print(request.POST)            # These two lines are just plyaing around with the submit button
         #print(request.POST['title']) # Like using mp[key] in C++
+        
+        newtags = request.POST.get('newtags').replace(',', " ").split()   # Take each word from the string, (kinda create an array/list of those words)
+        
         form = ProjectForm(request.POST, request.FILES)
         
         if form.is_valid():  # Django makes sure that all the things about the form are valid
@@ -77,6 +79,10 @@ def createProject(request):
             project.owner = profile     # Attach the newly created project to the 'cur' profile
             
             project.save()
+            
+            for tag in newtags:     # Now, add the tags too
+                tag, created = Tag.objects.get_or_create(name=tag)
+                project.tags.add(tag)
             
             return redirect('account') # Then, redirect them to the projects.html page
     
@@ -88,17 +94,22 @@ def createProject(request):
 @ login_required(login_url='login')     # They'll be redirected to the login page
 def updateProject (request,pk):
     profile = request.user.profile
-    project = Project.project_set.get(id=pk)
+    project = profile.project_set.get(id=pk)
     form = ProjectForm(instance=project)
     
     if request.method == 'POST':
+        newtags = request.POST.get('newtags').replace(',', " ").split()   # Take each word from the string, (kinda create an array/list of those words)
+                
         form = ProjectForm(request.POST, request.FILES ,instance=project)
-        
         if form.is_valid():
-            form.save()
+            project = form.save()
+            for tag in newtags:
+                tag, created = Tag.objects.get_or_create(name=tag)
+                project.tags.add(tag)
+                
             return redirect('account')
     
-    context = {'form':form}
+    context = {'form':form, 'project':project}
     return render(request,"projects/project_form.html",context)
 
 

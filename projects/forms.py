@@ -16,7 +16,7 @@ class ProjectForm(ModelForm):
         #Instead of __all__, we want to handpick which fields can be altered by the user, when 
         # creating a new project
         
-        fields = [ 'title' , 'featured_image' , 'description' , 'demo_link' , 'source_link' , 'tags' ]
+        fields = [ 'title' , 'featured_image' , 'description' , 'demo_link' , 'source_link']
         widgets = {
             'tags' : forms.CheckboxSelectMultiple
         }

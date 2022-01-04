@@ -10,7 +10,7 @@ from users.models import Profile
 
 """First Model"""
 class Project(models.Model):    # We're in the project app
-    owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL)
+    owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.CASCADE)
     
     title = models.CharField(max_length=200)    # This is a 'small amt of text' field
     description = models.TextField(null=True , blank=True)   # We're allowed to create a new 'object' while being able to leave this field blank, null by default, is set to false.
@@ -37,7 +37,16 @@ class Project(models.Model):    # We're in the project app
 
     class Meta:
         ordering = ['-vote_ratio', '-vote_total' , 'title']   # Order in the descending order of 'vote ratio', and if 'vote_ratios' are the same, then sort in the descending order of total votes. And if those two also match, then order in the alphabetical order (increasing order of 'title')
-        
+    
+    @property
+    def imageURL(self):
+        try:
+            url = self.featured_image.url
+        except:
+            url = ''
+            
+        return url
+    
     @property
     def getVoteCount (self):
         reviews = self.review_set.all()

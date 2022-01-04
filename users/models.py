@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 
+from django.db.models.expressions import OrderBy
+
 
 # Create your models here.
 
@@ -39,6 +41,18 @@ class Profile (models.Model):
     
     def __str__(self) -> str:
         return self.username
+    
+    class Meta:
+        ordering = ['created']
+    
+    @property
+    def imageURL(self):
+        try:
+            url = self.profile_image.url
+        except:
+            url = ''
+            
+        return url
     
 
 class Skill (models.Model):

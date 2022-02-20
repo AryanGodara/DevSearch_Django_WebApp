@@ -1,6 +1,6 @@
 # DevSearch_Django
 My first ever Django Project.
-A working link for this website (Not hoisted by me, owner is Dennis Ivy) :-
+A working link for this website (Not hosted by me, owner is Dennis Ivy) :-
 https://django-2021.herokuapp.com/
 
 
